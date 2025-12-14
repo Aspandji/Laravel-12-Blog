@@ -9,7 +9,19 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Post extends Model
 {
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'category_id',
+        'title',
+        'slug',
+        'excerpt',
+        'content',
+        'featured_image',
+        'is_published',
+        'published_at',
+        'meta_title',
+        'meta_description',
+        'meta_keywords',
+    ];
 
     protected $casts = [
         'published_at' => 'datetime',
