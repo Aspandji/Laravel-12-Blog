@@ -12,6 +12,7 @@ use Filament\Forms\Form;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -46,13 +47,17 @@ class CategoryResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('name')->searchable()->sortable(),
+                TextColumn::make('slug')->searchable(),
+                TextColumn::make('post_count')->counts('post')->label('Total Posts'),
+                TextColumn::make('created_at')->since()->sortable(),
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
