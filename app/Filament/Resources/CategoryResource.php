@@ -22,9 +22,11 @@ class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
 
+    protected static ?int $navigationSort = 2;
     protected static ?string $modelLabel = 'Category';
     protected static ?string $pluralModelLabel = 'Category';
-    protected static ?string $navigationIcon = 'heroicon-o-tag';
+    protected static ?string $navigationIcon = 'heroicon-o-folder';
+    protected static ?string $navigationGroup = 'Blog';
 
     public static function form(Form $form): Form
     {
@@ -32,12 +34,15 @@ class CategoryResource extends Resource
             ->schema([
                 TextInput::make('name')
                     ->required()
+                    ->minLength(3)
                     ->live(onBlur: true)
-                    ->afterStateUpdated(fn(string $operation, $state, Set $set) => $operation === 'create' ? $set('slug',  Str::slug($state)) : null),
+                    ->afterStateUpdated(fn(string $operation, $state, Set $set) => $operation === 'create' ? $set('slug',  Str::slug($state)) : null)
+                    ->placeholder('Nama Category'),
                 TextInput::make('slug')
                     ->required()
                     ->unique(ignoreRecord: true),
                 Textarea::make('description')
+                    ->placeholder('Description Category')
                     ->rows(3)
                     ->columnSpanFull()
             ]);
