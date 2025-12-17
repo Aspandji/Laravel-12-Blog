@@ -66,4 +66,14 @@ class Post extends Model
     {
         return $value ?: ($this->excerpt ?: Str::limit(strip_tags($this->content), 160));
     }
+
+    /**
+     * URL featured image dengan fallback default
+     */
+    public function getFeaturedImageUrlAttribute(): string
+    {
+        return $this->featured_image
+            ? asset('storage/' . $this->featured_image)
+            : asset('images/default-post.jpg');
+    }
 }

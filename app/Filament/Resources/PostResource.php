@@ -5,7 +5,9 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PostResource\Pages;
 use App\Filament\Resources\PostResource\RelationManagers;
 use App\Models\Post;
+use Carbon\Carbon;
 use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\MarkdownEditor;
@@ -22,6 +24,13 @@ use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\Indicator;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -92,7 +101,9 @@ class PostResource extends Resource
                                         '1:1'
                                     ])
                                     ->maxSize(5120)
-                                    ->helperText('Max 5MB. Recommended: 1200x630px'),
+                                    ->nullable()
+                                    ->helperText('Max 5MB. Recommended: 1200x630px')
+                                    ->dehydrated(fn($state) => filled($state)), //Biar saat EDIT tidak wajib upload ulang
 
                                 Textarea::make('excerpt')
                                     ->label('Deskipsi Singkat')
@@ -131,7 +142,7 @@ class PostResource extends Resource
                                     ->visible(fn(Get $get) => $get('is_published'))
                                     ->default(now())
                                     ->native(false)
-                                    ->required(fn(Forms\Get $get) => $get('is_published'))
+                                // ->required(fn(Forms\Get $get) => $get('is_published'))
                             ])
                             ->columns(2),
 
@@ -188,19 +199,119 @@ class PostResource extends Resource
     {
         return $table
             ->columns([
-                //
+                ImageColumn::make('featured_image')
+                    ->label('Gambar Artikel')
+                    ->size(60)
+                    ->getStateUsing(fn($record) => $record->featured_image_url),
+                TextColumn::make('title')
+                    ->label('Judul Artikel')
+                    ->searchable()
+                    ->sortable()
+                    ->limit(40)
+                    ->tooltip(function (TextColumn $column): ?string {
+                        $state = $column->getState();
+                        if (strlen($state) <= 40) {
+                            return null;
+                        }
+                        return $state;
+                    }),
+                TextColumn::make('category.name')
+                    ->sortable()
+                    ->badge()
+                    ->color('info')
+                    ->searchable(),
+                IconColumn::make('is_published')
+                    ->label('Published')
+                    ->boolean()
+                    ->trueIcon('heroicon-o-check-circle')
+                    ->falseIcon('heroicon-o-clock')
+                    ->trueColor('success')
+                    ->falseColor('warning'),
+                TextColumn::make('created_at')
+                    ->dateTime('M d, Y')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('updated_at')
+                    ->dateTime('M d, Y')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
             ])
             ->filters([
-                //
+                SelectFilter::make('category')
+                    ->relationship('category', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->multiple(),
+                TernaryFilter::make('is_published')
+                    ->label('Published Status')
+                    ->placeholder('All post')
+                    ->trueLabel('Published only')
+                    ->falseLabel('Draft only'),
+                Filter::make('published_at')
+                    ->form([
+                        DatePicker::make('published_from')
+                            ->label('Published from'),
+                        DatePicker::make('published_until')
+                            ->label('Published until'),
+                    ])
+                    ->query(function ($query, array $data) {
+                        return $query
+                            ->when(
+                                $data['published_from'],
+                                fn($q, $date) =>
+                                $q->whereDate('published_at', '>=', $date)
+                            )
+                            ->when(
+                                $data['published_until'],
+                                fn($q, $date) =>
+                                $q->whereDate('published_at', '<=', $date)
+                            );
+                    })
+                    ->indicateUsing(function (array $data): array {
+                        $indicators = [];
+                        if ($data['published_form'] ?? null) {
+                            $indicators[] = Indicator::make('Published from' . Carbon::parse($data['published_from'])->toFormattedDateString())->removeField('published_from');
+                        }
+                        if ($data['published_until'] ?? null) {
+                            $indicators[] = Indicator::make('Published until' . Carbon::parse($data['published_until'])->toFormattedDateString())->removeField('published_until');
+                        }
+                        return $indicators;
+                    })
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\BulkAction::make('publish')
+                        ->label('Publish Selected')
+                        ->icon('heroicon-o-check-circle')
+                        ->color('success')
+                        ->action(function ($records) {
+                            $records->each->update(['is_published' => true, 'published_at' => now()]);
+                        })
+                        ->deselectRecordsAfterCompletion()
+                        ->requiresConfirmation(),
+                    Tables\Actions\BulkAction::make('unpublish')
+                        ->label('Unpublish Selected')
+                        ->icon('heroicon-o-x-circle')
+                        ->color('danger')
+                        ->action(function ($records) {
+                            $records->each->update(['is_published' => false]);
+                        })
+                        ->deselectRecordsAfterCompletion()
+                        ->requiresConfirmation(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('created_at', 'desc') //default post terbaru
+            ->poll('30s') //Auto-refresh setiap 30 detik
+            ->striped()
+            ->paginated(([10, 25, 50, 100])) // Pagination options
+            ->defaultPaginationPageOption(10); //Default 10 per page; 
     }
 
     public static function getRelations(): array
@@ -215,7 +326,13 @@ class PostResource extends Resource
         return [
             'index' => Pages\ListPosts::route('/'),
             'create' => Pages\CreatePost::route('/create'),
+            'view' => Pages\ViewPost::route('/{record}'),
             'edit' => Pages\EditPost::route('/{record}/edit'),
         ];
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
     }
 }
