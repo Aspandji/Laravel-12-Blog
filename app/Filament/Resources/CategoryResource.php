@@ -54,7 +54,7 @@ class CategoryResource extends Resource
             ->columns([
                 TextColumn::make('name')->searchable()->sortable(),
                 TextColumn::make('slug')->searchable(),
-                TextColumn::make('post_count')->counts('post')->label('Total Posts'),
+                TextColumn::make('posts_count')->counts('posts')->label('Total Posts'),
                 TextColumn::make('created_at')->since()->sortable(),
             ])
             ->filters([
