@@ -54,7 +54,7 @@ class Post extends Model
     }
 
     // Query Scope dengan Eager loading
-    public function scopeWhithCategory(Builder $query): Builder
+    public function scopeWithCategory(Builder $query): Builder
     {
         return $query->with('category');
     }

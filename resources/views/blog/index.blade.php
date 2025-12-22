@@ -2,6 +2,29 @@
 
 @section('title', 'Home - 69Dev')
 
+@section('structured_data')
+
+    <!-- Add Schema.org Markup -->
+    @php
+        $collectionSchema =
+            isset($posts) && $posts->hasPages()
+                ? [
+                    '@context' => 'https://schema.org',
+                    '@type' => 'CollectionPage',
+                    'url' => request()->fullUrlWithoutQuery('page'),
+                    'name' => 'Blog Posts - Page ' . $posts->currentPage(),
+                    'isPartOf' => [
+                        '@type' => 'WebSite',
+                        'name' => '69Dev',
+                        'url' => url('/'),
+                    ],
+                ]
+                : null;
+    @endphp
+    <script type="application/ld+json">
+        {!! json_encode($collectionSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+    </script>
+@endsection
 
 @section('content')
     <div class="max-w-7xl mx-auto px-4 sm:px6 lg:px-8">
@@ -17,18 +40,16 @@
         <div class="flex flex-wrap -mx-4">
             <!-- Main Content -->
             <div class="w-full lg:w-2/3 px-4">
-                <h2 class="text-3xl font-bold mb-6 text-gray-900">Latest Articles</h2>
+                <h2 class="text-3xl font-bold mb-6 text-gray-900">News Articles</h2>
 
                 <div class="space-y-6">
                     @foreach ($posts as $post)
                         <article
                             class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col md:flex-row group border-l-4 border-purple-500">
-                            @if ($post->featured_image_url)
-                                <div class="md:w-2/5 overflow-hidden">
-                                    <img src="{{ $post->featured_image_url }}" alt="{{ $post->title }}"
-                                        class="w-full h-64 md:h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                                </div>
-                            @endif
+                            <div class="md:w-2/5 overflow-hidden">
+                                <img src="{{ $post->featured_image_url }}" alt="{{ $post->title }}"
+                                    class="w-full h-64 md:h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                            </div>
 
                             <div class="p-6 {{ $post->featured_image_url ? 'md:w-3/5' : 'w-full' }}">
                                 <div class="flex items-center gap-3 mb-3">
@@ -43,8 +64,8 @@
                                 </div>
 
                                 <h3 class="text-2xl font-bold mb-3">
-                                    {{-- <a href="{{ route('blog.show', $post->slug) }}" --}}
-                                    <a href="" class="hover:text-purple-600 transition">
+                                    <a href="{{ route('blog.show', $post->slug) }}"
+                                        class="hover:text-purple-600 transition">
                                         {{ $post->title }}
                                     </a>
                                 </h3>
@@ -53,8 +74,7 @@
                                     <p class="text-gray-600 mb-4 line-clamp-3">{{ $post->excerpt }}</p>
                                 @endif
 
-                                {{-- <a href="{{ route('blog.show', $post->slug) }}" --}}
-                                <a href=""
+                                <a href="{{ route('blog.show', $post->slug) }}"
                                     class="inline-flex items-center text-purple-600 hover:text-purple-800 font-semibold group">
                                     Read more
                                     <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none"
@@ -119,7 +139,7 @@
                         <ul class="space-y-4">
                             @foreach ($recentPosts as $recentPost)
                                 <li class="border-b border-purple-100 pb-4 last:border-b-0 last:pb-0">
-                                    <a href="" class="group">
+                                    <a href="{{ route('blog.show', $recentPost->slug) }}" class="group">
                                         <h4
                                             class="font-semibold text-sm group-hover:text-purple-600 transition line-clamp-2 mb-1">
                                             {{ $recentPost->title }}
