@@ -14,87 +14,94 @@
 @section('twitter_description', $post->meta_description)
 @section('twitter_image', $post->featured_image_url)
 
+
+<!-- Add Schema.org Markup -->
+@php
+    $articleSchema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'Article',
+        '@id' => route('blog.show', $post->slug) . '#article',
+        'headline' => $post->title,
+        'description' => strip_tags($post->meta_description ?? ($post->excerpt ?? '')),
+        'image' => [$post->featured_image_url],
+        'url' => route('blog.show', $post->slug),
+        'datePublished' => optional($post->published_at)->toIso8601String(),
+        'dateModified' => optional($post->updated_at)->toIso8601String(),
+        'inLanguage' => 'id-ID',
+        'isAccessibleForFree' => true,
+        'wordCount' => str_word_count(strip_tags($post->content)),
+        'articleSection' => optional($post->category)->name,
+        'keywords' => collect([$post->category->name ?? null, '69Dev', 'Web Development'])
+            ->filter()
+            ->values()
+            ->implode(', '),
+        'author' => [
+            '@type' => 'Organization',
+            'name' => '69Dev',
+            'url' => url('/'),
+        ],
+        'publisher' => [
+            '@type' => 'Organization',
+            '@id' => url('/#organization'),
+            'name' => '69Dev',
+            'logo' => [
+                '@type' => 'ImageObject',
+                'url' => asset('images/logo.png'),
+                'width' => 600,
+                'height' => 60,
+            ],
+        ],
+        'mainEntityOfPage' => [
+            '@type' => 'WebPage',
+            '@id' => route('blog.show', $post->slug),
+        ],
+    ];
+@endphp
+
+
+@php
+    $breadcrumbSchema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'BreadcrumbList',
+        '@id' => route('blog.show', $post->slug) . '#breadcrumb',
+        'itemListElement' => [
+            [
+                '@type' => 'ListItem',
+                'position' => 1,
+                'name' => 'Home',
+                'item' => url('/'),
+            ],
+            optional($post->category)
+                ? [
+                    '@type' => 'ListItem',
+                    'position' => 2,
+                    'name' => $post->category->name,
+                    'item' => route('blog.category', $post->category->slug),
+                ]
+                : null,
+            [
+                '@type' => 'ListItem',
+                'position' => optional($post->category) ? 3 : 2,
+                'name' => $post->title,
+                'item' => route('blog.show', $post->slug),
+            ],
+        ],
+    ];
+
+    $breadcrumbSchema['itemListElement'] = array_values(array_filter($breadcrumbSchema['itemListElement']));
+@endphp
+
 @section('structured_data')
 
-    <!-- Add Schema.org Markup -->
-    @php
-        $collectionSchema =
-            isset($posts) && $posts->hasPages()
-                ? [
-                    '@context' => 'https://schema.org',
-                    '@type' => 'CollectionPage',
-                    'url' => request()->fullUrlWithoutQuery('page'),
-                    'name' => 'Blog Posts - Page ' . $posts->currentPage(),
-                    'isPartOf' => [
-                        '@type' => 'WebSite',
-                        'name' => '69Dev',
-                        'url' => url('/'),
-                    ],
-                ]
-                : null;
-    @endphp
     <script type="application/ld+json">
-        {!! json_encode($collectionSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+    {!! json_encode($articleSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
     </script>
 
-    @php
-        $schema = [
-            '@context' => 'https://schema.org',
-            '@type' => 'Article',
-            'headline' => $post->title,
-            'description' => strip_tags($post->meta_description ?? ''),
-            'image' => $post->featured_image_url,
-            'datePublished' => optional($post->published_at)->toIso8601String(),
-            'dateModified' => optional($post->updated_at)->toIso8601String(),
-            'author' => [
-                '@type' => 'Organization',
-                'name' => '69Dev',
-            ],
-            'publisher' => [
-                '@type' => 'Organization',
-                'name' => '69Dev',
-                'logo' => [
-                    '@type' => 'ImageObject',
-                    'url' => asset('images/logo.png'),
-                ],
-            ],
-            'mainEntityOfPage' => [
-                '@type' => 'WebPage',
-                '@id' => route('blog.show', $post->slug),
-            ],
-        ];
-    @endphp
-
     <script type="application/ld+json">
-        {!! json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+    {!! json_encode($breadcrumbSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
     </script>
 
-    @php
-        $breadcrumbSchema = [
-            '@context' => 'https://schema.org',
-            '@type' => 'BreadcrumbList',
-            'itemListElement' => [
-                [
-                    '@type' => 'ListItem',
-                    'position' => 1,
-                    'name' => 'Home',
-                    'item' => route('blog.index'),
-                ],
-                [
-                    '@type' => 'ListItem',
-                    'position' => 3,
-                    'name' => $post->title,
-                    'item' => route('blog.show', $post->slug),
-                ],
-            ],
-        ];
-    @endphp
-    <script type="application/ld+json">
-        {!! json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
-    </script>
 @endsection
-
-
 
 
 @section('content')

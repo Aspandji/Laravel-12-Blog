@@ -70,8 +70,9 @@
 
                 <!-- Search Form -->
                 <div class="flex-1 max-w-lg mx-8">
-                    <form action="" method="GET" class="relative">
-                        <input type="text" name="q" value="" placeholder="Search articles..."
+                    <form action="{{ route('blog.search') }}" method="GET" class="relative">
+                        <input type="text" name="q" value="{{ request('q') }}"
+                            placeholder="Search articles..."
                             class="w-full px-4 py-2 pl-10 pr-4 text-gray-700 bg-white/90 border-0 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-400 focus:bg-white transition backdrop-blur-sm">
                         <button type="submit"
                             class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-purple-600">
@@ -83,19 +84,19 @@
                     </form>
                 </div>
 
-                <!-- Mobile Search Toggle -->
+                {{-- <!-- Mobile Search Toggle -->
                 <button id="search-toggle" class="lg:hidden text-white hover:text-purple-200">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
-                </button>
+                </button> --}}
             </div>
 
             <!-- Mobile Search Form -->
-            <div id="mobile-search" class="hidden pb-4 lg:hidden">
-                <form action="" method="GET" class="relative">
-                    <input type="text" name="q" value="" placeholder="Search articles..."
+            {{-- <div id="mobile-search" class="hidden pb-4 lg:hidden">
+                <form action="{{ route('blog.search') }}" method="GET" class="relative">
+                    <input type="text" name="q" value="{{ request('q') }}" placeholder="Search articles..."
                         class="w-full px-4 py-2 pl-10 pr-4 text-gray-700 bg-white/90 border-0 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-400 focus:bg-white transition">
                     <button type="submit"
                         class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-purple-600">
@@ -105,7 +106,7 @@
                         </svg>
                     </button>
                 </form>
-            </div>
+            </div> --}}
         </div>
     </nav>
 
@@ -126,13 +127,14 @@
         </div>
     </footer>
 
-    <script>
+    {{-- <script>
         // Mobile search toggle
         document.getElementById('search-toggle')?.addEventListener('click', function() {
             const mobileSearch = document.getElementById('mobile-search');
             mobileSearch.classList.toggle('hidden');
         });
-    </script>
+    </script> --}}
+
 </body>
 
 </html>
