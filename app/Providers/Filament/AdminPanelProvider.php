@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Widgets\LatestPosts;
+use App\Filament\Widgets\PopularCategories;
 use App\Filament\Widgets\PostsChart;
 use App\Filament\Widgets\StatsOverview;
 use Filament\Http\Middleware\Authenticate;
@@ -58,7 +59,8 @@ class AdminPanelProvider extends PanelProvider
                 // Custom widgets
                 StatsOverview::class,
                 PostsChart::class,
-                LatestPosts::class
+                LatestPosts::class,
+                PopularCategories::class
             ])
             ->middleware([
                 EncryptCookies::class,
