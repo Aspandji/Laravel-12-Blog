@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Widgets\PostsChart;
 use App\Filament\Widgets\StatsOverview;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -55,6 +56,7 @@ class AdminPanelProvider extends PanelProvider
 
                 // Custom widgets
                 StatsOverview::class,
+                PostsChart::class
             ])
             ->middleware([
                 EncryptCookies::class,
