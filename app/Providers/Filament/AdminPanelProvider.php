@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Widgets\StatsOverview;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -28,7 +29,19 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => [
+                    50 => '250, 245, 255',
+                    100 => '243, 232, 255',
+                    200 => '233, 213, 255',
+                    300 => '216, 180, 254',
+                    400 => '192, 132, 252',
+                    500 => '168, 85, 247',
+                    600 => '147, 51, 234',
+                    700 => '126, 34, 206',
+                    800 => '107, 33, 168',
+                    900 => '88, 28, 135',
+                    950 => '59, 7, 100',
+                ],
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
@@ -37,8 +50,11 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                // Widgets\AccountWidget::class,
+                // Widgets\FilamentInfoWidget::class,
+
+                // Custom widgets
+                StatsOverview::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -53,6 +69,12 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            ->brandName('69Dev')
+            // ->brandLogo(fn() => view('filament.components.logo'))
+            ->favicon(asset('favicon.png'))
+            ->darkMode(false)
+            ->sidebarCollapsibleOnDesktop()
+            ->spa();
     }
 }
