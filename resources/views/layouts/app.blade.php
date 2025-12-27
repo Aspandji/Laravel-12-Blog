@@ -71,7 +71,7 @@
                 <!-- Search Form -->
                 <div class="flex-1 max-w-lg mx-8">
                     <form action="{{ route('blog.search') }}" method="GET" class="relative">
-                        <input type="text" name="q" value="{{ request('q') }}"
+                        <input type="text" name="q" minlength="3" value="{{ request('q') }}"
                             placeholder="Search articles..."
                             class="w-full px-4 py-2 pl-10 pr-4 text-gray-700 bg-white/90 border-0 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-400 focus:bg-white transition backdrop-blur-sm">
                         <button type="submit"
