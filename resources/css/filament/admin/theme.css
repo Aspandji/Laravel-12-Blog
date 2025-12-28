@@ -185,18 +185,181 @@
   @apply bg-purple-50 text-purple-800 font-bold;
 }
 
-
 /* ============================
-   LOGIN PAGE
+   INPUT WRAPPER — BASE
 ============================ */
 
-.fi-simple-page {
-  background: linear-gradient(135deg,#faf5ff,#f3e8ff,#e9d5ff);
+.fi-input-wrp {
+  @apply border border-gray-300 rounded-lg transition;
 }
 
-.fi-logo {
-  opacity:.95;
+
+/* ============================
+   FOCUS — DARK & BOLD
+============================ */
+
+.fi-input-wrp:focus-within {
+  /* garis utama */
+  @apply border-purple-700;
+
+  /* ring lebih tebal & gelap */
+  box-shadow:
+    0 0 0 3px rgba(109, 40, 217, 0.85),   /* ring utama */
+    0 0 0 6px rgba(109, 40, 217, 0.25);   /* glow halus */
 }
+
+
+/* ============================
+   INPUT BASE
+============================ */
+
+.fi-input {
+  @apply outline-none border-0 bg-transparent;
+}
+
+
+/* ============================
+   SELECT / TOMSELECT
+============================ */
+
+.fi-select-wrp {
+  @apply border border-gray-300 rounded-lg transition;
+}
+
+.fi-select-wrp:focus-within {
+  @apply border-purple-700;
+  box-shadow:
+    0 0 0 3px rgba(109, 40, 217, 0.85),
+    0 0 0 6px rgba(109, 40, 217, 0.25);
+}
+
+
+/* ============================
+   FILE UPLOAD
+============================ */
+
+.fi-fo-file-upload {
+  @apply border border-gray-300 rounded-xl transition;
+}
+
+.fi-fo-file-upload:focus-within {
+  @apply border-purple-700;
+  box-shadow:
+    0 0 0 3px rgba(109, 40, 217, 0.85),
+    0 0 0 6px rgba(109, 40, 217, 0.25);
+}
+
+
+/* ============================
+   ERROR STATE (LEBIH TEGAS)
+============================ */
+
+.fi-error .fi-input-wrp:focus-within {
+  @apply border-rose-700;
+  box-shadow:
+    0 0 0 3px rgba(190, 18, 60, 0.9),
+    0 0 0 6px rgba(190, 18, 60, 0.25);
+}
+
+/* ============================
+   TOGGLE — BASE
+============================ */
+
+.fi-fo-toggle {
+  @apply transition-colors duration-200 ease-in-out;
+}
+
+
+/* ============================
+   TOGGLE — OFF
+============================ */
+
+.fi-fo-toggle[aria-checked="false"] {
+  @apply bg-gray-200 dark:bg-gray-700;
+}
+
+
+/* ============================
+   TOGGLE — ON (INI KUNCI)
+============================ */
+
+.fi-fo-toggle[aria-checked="true"] {
+  background-color: rgb(109 40 217); /* purple-700 */
+}
+
+/* dark mode */
+.dark .fi-fo-toggle[aria-checked="true"] {
+  background-color: rgb(126 34 206); /* purple-600 */
+}
+
+
+/* ============================
+   THUMB (BULATAN)
+============================ */
+
+.fi-fo-toggle > span {
+  @apply bg-white shadow;
+}
+
+
+/* ============================
+   FOCUS
+============================ */
+
+.fi-fo-toggle:focus-visible {
+  box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.7);
+}
+
+
+/* ============================
+   DISABLED
+============================ */
+
+.fi-fo-toggle[disabled] {
+  @apply opacity-60 cursor-not-allowed;
+}
+
+
+
+/* ============================
+   BADGES — UNIFIED STYLE
+============================ */
+
+.fi-badge {
+  @apply rounded-full px-2.5 py-1 text-xs font-semibold;
+}
+
+/* Primary */
+.fi-badge-color-primary,
+.fi-badge-color-info {
+  @apply bg-purple-100 text-purple-800 border border-purple-200;
+}
+
+/* Success */
+.fi-badge-color-success {
+  @apply bg-emerald-100 text-emerald-800 border border-emerald-200;
+}
+
+/* Warning */
+.fi-badge-color-warning {
+  @apply bg-amber-100 text-amber-800 border border-amber-200;
+}
+
+/* Danger */
+.fi-badge-color-danger {
+  @apply bg-rose-100 text-rose-800 border border-rose-200;
+}
+
+/* Secondary */
+.fi-badge-color-secondary {
+  @apply bg-gray-200 text-gray-800 border border-gray-300;
+}
+
+/* Clickable */
+.fi-badge a {
+  @apply hover:brightness-110 transition;
+}
+
 
 
 
