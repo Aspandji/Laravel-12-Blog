@@ -70,6 +70,7 @@ class AdminPanelProvider extends PanelProvider
             ->favicon(asset('favicon.png'))
             ->darkMode(false)
             ->sidebarCollapsibleOnDesktop()
-            ->spa();
+            ->spa()
+            ->theme(asset('css/filament/admin/theme.css'));
     }
 }

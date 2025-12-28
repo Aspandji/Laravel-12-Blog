@@ -1,0 +1,207 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@tailwind variants;
+@import '../../../../vendor/filament/filament/resources/css/base.css';
+
+@config 'tailwind.config.js';
+
+
+/* ============================
+   BRAND COLORS
+============================ */
+
+:root {
+  --primary-50:#faf5ff;
+  --primary-100:#f3e8ff;
+  --primary-200:#e9d5ff;
+  --primary-300:#d8b4fe;
+  --primary-400:#c084fc;
+  --primary-500:#a855f7;
+  --primary-600:#9333ea;
+  --primary-700:#7e22ce;
+  --primary-800:#6b21a8;
+  --primary-900:#581c87;
+}
+
+
+/* ============================
+   SIDEBAR
+============================ */
+
+.fi-sidebar {
+  @apply text-white;
+  background: linear-gradient(180deg,#5b21b6,#7e22ce,#a855f7) !important;
+}
+
+/* Group Title */
+.fi-sidebar-group-label {
+  @apply text-white font-bold opacity-90;
+}
+
+/* Chevron toggle */
+.fi-sidebar-group-toggle svg {
+  @apply text-white;
+}
+
+/* Divider */
+.fi-sidebar-group-hr {
+  border-color: rgba(255,255,255,.25) !important;
+}
+
+
+/* ============================
+   MENU ITEMS
+============================ */
+
+.fi-sidebar-item-button {
+  @apply rounded-2xl text-white;
+}
+
+/* icon */
+.fi-sidebar-item-icon {
+  @apply text-white opacity-90;
+}
+
+/* label */
+.fi-sidebar-item-label {
+  @apply text-white;
+}
+
+
+/* ---------- Hover = glass ---------- */
+
+.fi-sidebar-item-button:hover {
+  @apply text-white;
+  background: rgba(255,255,255,.14) !important;
+  backdrop-filter: blur(8px);
+}
+
+
+/* ============================
+   ACTIVE MENU (NEW STYLE)
+============================ */
+
+.fi-sidebar-item.fi-active {
+
+  /* Button highlight */
+  .fi-sidebar-item-button {
+    @apply relative text-white font-bold;
+    background: rgba(255,255,255,.22) !important;
+    backdrop-filter: blur(10px);
+  }
+
+  /* Border kiri supaya jelas */
+  .fi-sidebar-item-button::before {
+    content: "";
+    position: absolute;
+    left: -6px;
+    top: 8px;
+    bottom: 8px;
+    width: 3px;
+    border-radius: 10px;
+    background: white;
+  }
+
+  /* Icon lebih solid */
+  .fi-sidebar-item-icon {
+    @apply text-white opacity-100;
+  }
+
+  /* Label lebih tebal */
+  .fi-sidebar-item-label {
+    @apply text-white font-semibold;
+  }
+}
+
+
+/* ============================
+   BUTTONS — FINAL CLEAN STYLE
+============================ */
+
+.fi-btn {
+  @apply rounded-xl font-semibold shadow-sm inline-grid items-center gap-1.5 transition;
+}
+
+/* PRIMARY (CRUD, Save, Create, etc) */
+.fi-btn-color-primary {
+  @apply bg-purple-700 text-white border border-purple-800/30;
+}
+
+.fi-btn-color-primary:hover {
+  @apply bg-purple-800 text-white;
+}
+
+.fi-btn-color-primary:focus-visible {
+  @apply ring-2 ring-purple-500/50;
+}
+
+/* SECONDARY */
+.fi-btn-color-secondary {
+  @apply bg-purple-100 text-purple-800 border border-purple-200;
+}
+
+.fi-btn-color-secondary:hover {
+  @apply bg-purple-200 text-purple-900;
+}
+
+/* DANGER */
+.fi-btn-color-danger {
+  @apply bg-rose-600 text-white border border-rose-700/40;
+}
+
+.fi-btn-color-danger:hover {
+  @apply bg-rose-700 text-white;
+}
+
+
+
+/* ============================
+   TABLE
+============================ */
+
+.fi-ta-table thead {
+  @apply bg-purple-50;
+}
+
+.fi-ta-table th {
+  @apply text-purple-800 font-bold;
+}
+
+.fi-ta-row:hover {
+  @apply bg-purple-50;
+}
+
+
+/* ============================
+   MODAL
+============================ */
+
+.fi-modal {
+  @apply rounded-2xl;
+}
+
+.fi-modal-header {
+  @apply bg-purple-50 text-purple-800 font-bold;
+}
+
+
+/* ============================
+   LOGIN PAGE
+============================ */
+
+.fi-simple-page {
+  background: linear-gradient(135deg,#faf5ff,#f3e8ff,#e9d5ff);
+}
+
+.fi-logo {
+  opacity:.95;
+}
+
+
+
+
+
+
+
+
