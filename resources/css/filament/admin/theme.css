@@ -7,6 +7,7 @@
 @config 'tailwind.config.js';
 
 
+
 /* ============================
    BRAND COLORS
 ============================ */
@@ -91,7 +92,7 @@
     backdrop-filter: blur(10px);
   }
 
-  /* Border kiri supaya jelas */
+  /* Border kiri */
   .fi-sidebar-item-button::before {
     content: "";
     position: absolute;
@@ -116,7 +117,7 @@
 
 
 /* ============================
-   BUTTONS — FINAL CLEAN STYLE
+   BUTTONS
 ============================ */
 
 .fi-btn {
@@ -251,7 +252,7 @@
 
 
 /* ============================
-   ERROR STATE (LEBIH TEGAS)
+   ERROR STATE
 ============================ */
 
 .fi-error .fi-input-wrp:focus-within {
@@ -320,45 +321,6 @@
 }
 
 
-
-/* ============================
-   BADGES — UNIFIED STYLE
-============================ */
-
-.fi-badge {
-  @apply rounded-full px-2.5 py-1 text-xs font-semibold;
-}
-
-/* Primary */
-.fi-badge-color-primary,
-.fi-badge-color-info {
-  @apply bg-purple-100 text-purple-800 border border-purple-200;
-}
-
-/* Success */
-.fi-badge-color-success {
-  @apply bg-emerald-100 text-emerald-800 border border-emerald-200;
-}
-
-/* Warning */
-.fi-badge-color-warning {
-  @apply bg-amber-100 text-amber-800 border border-amber-200;
-}
-
-/* Danger */
-.fi-badge-color-danger {
-  @apply bg-rose-100 text-rose-800 border border-rose-200;
-}
-
-/* Secondary */
-.fi-badge-color-secondary {
-  @apply bg-gray-200 text-gray-800 border border-gray-300;
-}
-
-/* Clickable */
-.fi-badge a {
-  @apply hover:brightness-110 transition;
-}
 
 
 

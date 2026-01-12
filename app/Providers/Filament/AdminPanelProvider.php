@@ -7,6 +7,7 @@ use App\Filament\Widgets\LatestPosts;
 use App\Filament\Widgets\PopularCategories;
 use App\Filament\Widgets\PostsChart;
 use App\Filament\Widgets\StatsOverview;
+use DiogoGPinto\AuthUIEnhancer\AuthUIEnhancerPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -31,7 +32,7 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->login() // Custom login Pages
+            ->login(Login::class) // Custom login Pages
             ->colors([
                 'primary' => [
                     50 => '250, 245, 255',
@@ -77,6 +78,17 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
+            ->plugins([
+                // AuthUIEnhancerPlugin::make()
+                //     ->formPanelPosition('left')
+                //     ->formPanelBackgroundColor(Color::Zinc, '300'),
+            ])
+            // ->assets([
+            //     \Filament\Support\Assets\Css::make(
+            //         'custom-auth',
+            //         resource_path('css/filament/auth.css')
+            //     ),
+            // ])
             ->brandName('69Dev')
             ->brandLogo(fn() => view('filament.components.logo'))
             ->favicon(asset('favicon.png'))
