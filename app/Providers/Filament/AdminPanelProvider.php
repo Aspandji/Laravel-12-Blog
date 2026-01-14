@@ -78,20 +78,11 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->plugins([
-                // AuthUIEnhancerPlugin::make()
-                //     ->formPanelPosition('left')
-                //     ->formPanelBackgroundColor(Color::Zinc, '300'),
-            ])
-            // ->assets([
-            //     \Filament\Support\Assets\Css::make(
-            //         'custom-auth',
-            //         resource_path('css/filament/auth.css')
-            //     ),
-            // ])
+            ->plugins([])
             ->brandName('69Dev')
-            ->brandLogo(fn() => view('filament.components.logo'))
-            ->favicon(asset('favicon.png'))
+            ->brandLogo(asset('images/logo.png'))
+            ->brandLogoHeight('120px')
+            ->favicon(asset('images/favicon.png'))
             ->darkMode(false)
             ->sidebarCollapsibleOnDesktop()
             ->spa()

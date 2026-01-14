@@ -20,7 +20,7 @@
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:title" content="@yield('og_title', config('app.name'))">
     <meta property="og:description" content="@yield('og_description', '69Dev - Portal teknologi terkini')">
-    <meta property="og:image" content="@yield('og_image', asset('images/default-og-image.jpg'))">
+    <meta property="og:image" content="@yield('og_image', asset('images/logo.png'))">
     <meta property="og:site_name" content="69Dev">
 
     <!-- Twitter Card -->
@@ -28,10 +28,11 @@
     <meta name="twitter:url" content="{{ url()->current() }}">
     <meta name="twitter:title" content="@yield('twitter_title', config('app.name'))">
     <meta name="twitter:description" content="@yield('twitter_description', '69Dev - Portal teknologi terkini')">
-    <meta name="twitter:image" content="@yield('twitter_image', asset('images/default-og-image.jpg'))">
+    <meta name="twitter:image" content="@yield('twitter_image', asset('images/logo.png'))">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
+
 
     <!-- Canonical URL -->
     <link rel="canonical" href="{{ url()->current() }}">
@@ -59,12 +60,8 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center">
-                    <a href="{{ route('blog.index') }}"
-                        class="text-2xl font-bold text-white hover:text-purple-200 transition flex items-center gap-2">
-                        <h3 class="text-3xl font-bold mb-2">
-                            <span class="text-4xl text-purple-400">69</span>
-                            <span>Dev</span>
-                        </h3>
+                    <a href="{{ route('blog.index') }}" class="flex items-center gap-3">
+                        <img src="{{ asset('images/logo.png') }}" alt="69Dev Logo" class="h-32 w-auto object-contain">
                     </a>
                 </div>
 
@@ -117,14 +114,15 @@
     <footer class="bg-gradient-to-r from-gray-900 via-purple-900 to-violet-900 text-white py-12 mt-20">
         <div class="max-w-7xl mx-auto px-4">
             <div class="text-center">
-                <h3 class="text-3xl font-bold mb-2">
-                    <span class="text-4xl text-purple-400">69</span>
-                    <span>Dev</span>
-                </h3>
+                <a href="{{ route('blog.index') }}" class="flex justify-center items-center w-full">
+                    <img src="{{ asset('images/logo.png') }}" alt="69Dev Logo" class="h-36 w-auto object-contain">
+                </a>
+
                 <p class="text-purple-200 mb-4">Your Lucky Tech Portal</p>
                 <p class="text-gray-400 text-sm">&copy; {{ date('Y') }} 69Dev. All rights reserved.</p>
             </div>
         </div>
+
     </footer>
 
     {{-- <script>
