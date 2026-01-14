@@ -48,6 +48,13 @@
         @endif
     @endif
 
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
+
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <!-- JSON-LD Structured Data -->
@@ -56,55 +63,83 @@
 </head>
 
 <body class="bg-gray-50">
-    <nav class="bg-gradient-to-r from-purple-900 via-purple-800 to-violet-900 shadow-lg sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center">
-                    <a href="{{ route('blog.index') }}" class="flex items-center gap-3">
-                        <img src="{{ asset('images/logo.png') }}" alt="69Dev Logo" class="h-32 w-auto object-contain">
-                    </a>
-                </div>
+    <nav x-data="{ openSearch: false }"
+        class="relative bg-gradient-to-r from-purple-900 via-purple-800 to-violet-900
+           shadow-lg sticky top-0 z-50">
 
-                <!-- Search Form -->
-                <div class="flex-1 max-w-lg mx-8">
-                    <form action="{{ route('blog.search') }}" method="GET" class="relative">
-                        <input type="text" name="q" minlength="3" value="{{ request('q') }}"
-                            placeholder="Search articles..."
-                            class="w-full px-4 py-2 pl-10 pr-4 text-gray-700 bg-white/90 border-0 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-400 focus:bg-white transition backdrop-blur-sm">
-                        <button type="submit"
-                            class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-purple-600">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+
+                <!-- LOGO -->
+                <a href="{{ route('blog.index') }}" class="flex items-center gap-2">
+
+                    <!-- Mobile Logo -->
+                    <img src="{{ asset('images/logo.png') }}" alt="69Dev"
+                        class="h-20 w-auto sm:hidden object-contain">
+
+                    <!-- Desktop Logo -->
+                    <img src="{{ asset('images/logo.png') }}" alt="69Dev"
+                        class="hidden sm:block h-32 w-auto object-contain">
+
+                </a>
+
+                <!-- DESKTOP SEARCH -->
+                <div class="hidden sm:flex flex-1 max-w-lg mx-6">
+                    <form action="{{ route('blog.search') }}" method="GET" class="relative w-full">
+
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                            <!-- SVG SEARCH -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
-                        </button>
+                        </span>
+
+                        <input type="text" name="q" placeholder="Search articles..."
+                            class="w-full px-4 py-2 pl-10 text-sm rounded-full
+                               bg-white/90 text-gray-800
+                               focus:outline-none focus:ring-2 focus:ring-purple-400">
                     </form>
                 </div>
 
-                {{-- <!-- Mobile Search Toggle -->
-                <button id="search-toggle" class="lg:hidden text-white hover:text-purple-200">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <!-- MOBILE SEARCH BUTTON -->
+                <button @click="openSearch = !openSearch"
+                    class="sm:hidden p-2 rounded-full bg-white/10 text-white
+                       focus:outline-none focus:ring-2 focus:ring-white/30">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
-                </button> --}}
+                </button>
             </div>
-
-            <!-- Mobile Search Form -->
-            {{-- <div id="mobile-search" class="hidden pb-4 lg:hidden">
-                <form action="{{ route('blog.search') }}" method="GET" class="relative">
-                    <input type="text" name="q" value="{{ request('q') }}" placeholder="Search articles..."
-                        class="w-full px-4 py-2 pl-10 pr-4 text-gray-700 bg-white/90 border-0 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-400 focus:bg-white transition">
-                    <button type="submit"
-                        class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-purple-600">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                    </button>
-                </form>
-            </div> --}}
         </div>
+
+        <!-- MOBILE SEARCH DROPDOWN -->
+        <div x-show="openSearch" x-transition x-cloak @click.outside="openSearch = false"
+            class="sm:hidden absolute inset-x-0 top-full
+               bg-purple-900/95 backdrop-blur
+               px-4 py-3 shadow-lg">
+
+            <form action="{{ route('blog.search') }}" method="GET" class="relative">
+
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </span>
+
+                <input type="text" name="q" placeholder="Search articles..."
+                    class="w-full px-4 py-2 pl-10 text-sm
+                       rounded-full bg-white text-gray-800
+                       focus:outline-none focus:ring-2 focus:ring-purple-400">
+            </form>
+        </div>
+
     </nav>
 
     <main class="py-10">
@@ -115,7 +150,14 @@
         <div class="max-w-7xl mx-auto px-4">
             <div class="text-center">
                 <a href="{{ route('blog.index') }}" class="flex justify-center items-center w-full">
-                    <img src="{{ asset('images/logo.png') }}" alt="69Dev Logo" class="h-36 w-auto object-contain">
+
+                    <!-- Desktop Mobile -->
+                    <img src="{{ asset('images/logo.png') }}" alt="69Dev"
+                        class="h-24 w-auto sm:hidden object-contain">
+
+                    <!-- Desktop Logo -->
+                    <img src="{{ asset('images/logo.png') }}" alt="69Dev"
+                        class="hidden sm:block h-32 w-auto object-contain">
                 </a>
 
                 <p class="text-purple-200 mb-4">Your Lucky Tech Portal</p>
@@ -132,6 +174,8 @@
             mobileSearch.classList.toggle('hidden');
         });
     </script> --}}
+
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
 </body>
 
